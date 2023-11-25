@@ -1,8 +1,10 @@
 import { useQuery } from '@tanstack/react-query'
+import { useRef } from 'react'
 import ChatMessage from './ChatMessage'
 import Spinner from './Spinner'
 
 export default function ChatBoard() {
+  const ref = useRef<HTMLDivElement>(null)
   const { isLoading, data } = useQuery<ChatResponse[]>({
     queryKey: ['chats'],
     queryFn: () =>
@@ -11,7 +13,7 @@ export default function ChatBoard() {
         .then((data) => data.chats),
   })
   return (
-    <div className="flex flex-col flex-grow h-0 p-4 overflow-auto">
+    <div className="flex flex-col flex-grow h-0 p-4 overflow-auto" ref={ref}>
       {isLoading ? (
         <LoadingBoard />
       ) : (

@@ -1,19 +1,24 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { useRef } from 'react'
 import { useForm } from 'react-hook-form'
 
 export default function ChatInput() {
   const queryClient = useQueryClient()
-  const { handleSubmit, register, watch, reset } = useForm()
+  const { handleSubmit, register, reset } = useForm()
   const { mutate } = useMutation({
     mutationFn: (msg: string) =>
       fetch(`/api/chats?question=${encodeURIComponent(msg)}`, {
         method: 'POST',
       }),
-    onSuccess: async (resp: Response) => {
+    onMutate: (variables: string) =>
+      queryClient.cancelQueries({
+        queryKey: ['chats'],
+      }),
+    onSuccess: async (resp: Response, variables: string) => {
       const headers = resp.headers
       const questionId = headers.get('x-question-id') as string
       const questionCreatedAt = headers.get('x-question-created-at') as string
-      const question = watch('message')
+      const question = variables
 
       const responseCreatedAt = headers.get('x-response-created-at') as string
       const responseId = headers.get('x-response-id') as string
@@ -33,8 +38,6 @@ export default function ChatInput() {
         },
       ])
       const reader = resp.body?.getReader()
-      // look so like while true
-      // TODO: find for await way
       reader?.read().then(function processText({ done, value }): unknown {
         if (done) return
 
