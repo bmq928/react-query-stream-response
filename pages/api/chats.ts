@@ -23,7 +23,8 @@ const db = [
     createdAt: new Date(),
   },
 ]
-function getChatHistory(req: NextApiRequest, res: NextApiResponse) {
+async function getChatHistory(req: NextApiRequest, res: NextApiResponse) {
+  await setTimeout(1000)
   res.status(200).json({ chats: db })
 }
 async function askBot(req: NextApiRequest, res: NextApiResponse) {
