@@ -17,7 +17,7 @@ function BotChatMessage({
   return (
     <div className="flex w-full mt-2 space-x-3 max-w-xs">
       <svg
-        className="flex-shrink-0 h-10 w-10 fill-gray-500"
+        className="flex-shrink-0 h-10 w-10 fill-blue-400"
         fill="#000000"
         viewBox="0 0 24 24"
         xmlns="http://www.w3.org/2000/svg"

@@ -1,20 +1,37 @@
+import { useQuery } from '@tanstack/react-query'
 import ChatMessage from './ChatMessage'
 import Spinner from './Spinner'
 
 export default function ChatBoard() {
+  const { isLoading, data } = useQuery<ChatResponse[]>({
+    queryKey: ['chats'],
+    queryFn: () =>
+      fetch('/api/chats')
+        .then((resp) => resp.json())
+        .then((data) => data.chats),
+  })
   return (
     <div className="flex flex-col flex-grow h-0 p-4 overflow-auto">
+      {isLoading ? (
+        <LoadingBoard />
+      ) : (
+        data?.map(({ id, isBot, message, createdAt }) => (
+          <ChatMessage
+            key={id}
+            isBot={isBot}
+            message={message}
+            createdAt={new Date(createdAt)}
+          />
+        ))
+      )}
+    </div>
+  )
+}
+
+function LoadingBoard() {
+  return (
+    <div className="flex w-full h-full justify-center items-center">
       <Spinner />
-      <ChatMessage
-        isBot={false}
-        message="Hello loreamda adsfjlajsd;fjasldjfsald faskdjfl;asd"
-        createdAt={new Date()}
-      />
-      <ChatMessage
-        isBot={true}
-        message="I'am bot aklsdjf;ajsd;fja;lsdjf;ajsd;fj;asjdf;ajs;dfjas;dfj"
-        createdAt={new Date()}
-      />
     </div>
   )
 }
