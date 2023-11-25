@@ -1,5 +1,4 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { useRef } from 'react'
 import { useForm } from 'react-hook-form'
 
 export default function ChatInput() {
@@ -88,7 +87,7 @@ export default function ChatInput() {
           type="text"
           placeholder="Write your message!"
           className="w-full focus:outline-none focus:placeholder-gray-400 text-gray-600 placeholder-gray-600 pl-12 bg-gray-50 rounded-md py-3"
-          autoFocus={true}
+          autoComplete="off"
           {...register('message', { required: true })}
         />
         <div className="items-center inset-y-0 hidden sm:flex">
